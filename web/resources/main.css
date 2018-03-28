@@ -1,0 +1,181 @@
+#resultDiv, #selectDiv {
+    display: none;
+}
+
+.close {
+    color: #000;
+    filter: alpha(opacity=20);
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    opacity: .6;
+    text-shadow: 0 1px 0 #fff;
+}
+
+.ctable{
+    font-size: 16px;
+    table-layout:fixed;
+    width: 100%;
+}
+
+.ctable th {
+    margin-bottom: 10px;
+    padding: 13px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    background-color: rgba(0, 210, 136, 0.24);
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 150ms ease-in-out, border 150ms ease-in-out, background-color 150ms ease-in-out;
+    font-family: 'Varela', sans-serif;
+    color: white;
+    font-style: normal;
+}
+
+.ctable > tbody tr:nth-child(odd) td {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    background-color: rgba(188, 185, 185, 0.2);
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 150ms ease-in-out, border 150ms ease-in-out, background-color 150ms ease-in-out;
+    font-family: 'Varela', sans-serif;
+    color: white;
+    font-style: normal;
+    text-align: center;
+}
+
+.ctable > tbody tr:nth-child(even) td {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    background-color: rgba(93, 126, 155, 0.22);
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 150ms ease-in-out, border 150ms ease-in-out, background-color 150ms ease-in-out;
+    font-family: 'Varela', sans-serif;
+    color: white;
+    font-style: normal;
+    text-align: center;
+}
+
+.main {
+    max-width: 1125px;
+    min-width: 565px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #756c706e;
+    background-position: 50% top;
+    background-size: cover;
+    box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, 0.2);
+    margin: 5px;
+}
+
+.main .popup {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 3px 15px -1px rgba(0, 0, 0, 0.5);
+}
+
+
+
+.main .main-form {
+    padding: 18px;
+}
+
+.main .form-field {
+    padding: 13px 15px 13px 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.15);
+    background-repeat: no-repeat;
+    box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 150ms ease-in-out,
+    border 150ms ease-in-out,
+    background-color 150ms ease-in-out;
+    font-family: 'Varela', sans-serif;
+    color: white;
+    font-size: 16px;
+    font-style: normal;
+}
+
+.main .form-field:focus {
+    border: 1px solid rgba(56, 117, 214, 0.7);
+    background-color: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0),
+    inset 0 3px 10px -5px rgba(0, 0, 0, 0.4),
+    0 0 16px 0 rgba(67, 176, 158, 0.6);
+}
+
+.button {
+    padding: 11px;
+    border: none;
+    border-radius: 3px;
+    background-color: #0ebfa1;
+    background-image: linear-gradient(0deg, rgba(75, 75, 75, 0.56), transparent);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 4px 7px -4px rgba(255, 255, 255, 0.7),
+    inset 0 56px 47px -41px rgba(255, 255, 255, 0),
+    0 0 8px -1px rgba(0, 0, 0, 0.5);
+    transition: box-shadow 150ms ease-in-out;
+    transition-property: box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: ease-in-out;
+    transition-delay: initial;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    text-align: center;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.7);
+}
+
+.button:hover {
+    box-shadow: inset 0 0 2px 1px rgba(255, 255, 255, 0.15),
+    inset 0 4px 7px -4px rgba(255, 255, 255, 0.7),
+    inset 0 56px 47px -41px rgba(255, 255, 255, 0.2),
+    0 0 8px -1px rgba(0, 0, 0, 0.85);
+}
+
+.hour-entry {
+    width: 100%;
+}
+
+@media (max-width: 979px) and (min-width: 768px) {
+    .main .popup {
+        margin-right: -62px;
+        margin-left: -62px;
+    }
+
+}
+
+@media (max-width: 767px) {
+
+    .main {
+        padding: 10px 20px;
+    }
+
+    .main .main-form {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .main {
+        min-width: 300px;
+        padding: 21px 10px;
+    }
+
+    table{
+        font-size: 10px;
+    }
+
+    .button{
+        margin-top: 10px;
+    }
+}
+
