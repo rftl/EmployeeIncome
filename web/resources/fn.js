@@ -82,6 +82,7 @@ function getResult() {
 function clearForm() {
     $('input[type=text]').val('');
     $('#resultDiv').slideUp(100);
+    $('#selectDiv').slideUp(100);
 }
 
 function selectEmployee(id) {
