@@ -13,11 +13,16 @@ import java.io.IOException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.time.format.DateTimeFormatter;
+
+import static java.time.DayOfWeek.*;
+import static java.time.temporal.TemporalAdjusters.*;
 
 
-@WebServlet(name = "Servlet")
-public class Servlet extends HttpServlet {
+@WebServlet(name = "Records")
+public class Records extends HttpServlet {
 
     private static MysqlDataSource getDS() {
         MysqlDataSource ds = new MysqlConnectionPoolDataSource();
@@ -96,47 +101,51 @@ public class Servlet extends HttpServlet {
         PreparedStatement stmt = null;
         int rs;
         JSONObject response = new JSONObject();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate inputDate = LocalDate.parse(week, formatter).with(previousOrSame(SUNDAY));
 
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        java.util.Date dateStr = formatter.parse(week);
-        java.sql.Date date = new java.sql.Date(dateStr.getTime());
+        java.sql.Date date = Date.valueOf(inputDate);
 
+        if (inputDate.isBefore(LocalDate.now()) || inputDate.isEqual(LocalDate.now())) {
+            String sql = "insert into Company.Employee_Hours " +
+                    "(week,emp_id,sun,mon,tue,wed,thu,fri,sat) " +
+                    "values" +
+                    "('" + date + "','" + id + "','" + sun + "','" + mon + "','" +
+                    tue + "','" + wed + "','" + thu + "','" + fri + "','" + sat + "')" +
+                    "ON DUPLICATE KEY UPDATE sun='" + sun + "',mon='" + mon + "',tue='" +
+                    tue + "',wed='" + wed + "',thu='" + thu + "',fri='" + fri + "',sat='" + sat + "'";
 
-        String sql = "insert into Company.Employee_Hours " +
-                "(week,emp_id,sun,mon,tue,wed,thu,fri,sat) " +
-                "values" +
-                "('" + date + "','" + id + "','" + sun + "','" + mon + "','" +
-                tue + "','" + wed + "','" + thu + "','" + fri + "','" + sat + "')" +
-                "ON DUPLICATE KEY UPDATE sun='" + sun + "',mon='" + mon + "',tue='" +
-                tue + "',wed='" + wed + "',thu='" + thu + "',fri='" + fri + "',sat='" + sat + "'";
+            System.out.println(sql);
 
-        System.out.println(sql);
-
-        try {
-            con = getDS().getConnection();
-            stmt = con.prepareStatement(sql);
-            rs = stmt.executeUpdate();
-            if (rs > 0)
-                response = new JSONObject("{state:successful}");
-            else
-                response = new JSONObject("{state:failed}");
-
-        } catch (SQLException e) {
-            response = new JSONObject("{state:failed}");
-            e.printStackTrace();
-        } finally {
             try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
-            } catch (Exception e) {
+                con = getDS().getConnection();
+                stmt = con.prepareStatement(sql);
+                rs = stmt.executeUpdate();
+                if (rs > 0) {
+                    String msg = (rs == 1) ? "record inserted" : "record updated";
+                    response = new JSONObject("{state:successful,msg:" + msg + "}");
+                } else
+                    response = new JSONObject("{state:failed,msg:error in insert}");
+
+            } catch (SQLException e) {
+                response = new JSONObject("{state:failed,msg:" + e.getMessage() + "}");
                 e.printStackTrace();
+            } finally {
+                try {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        } else {
+            response = new JSONObject("{state:failed,msg:Selected week cannot be in the future}");
         }
-        System.out.println("TEST: " + test);
+
         return response;
     }
 
@@ -165,15 +174,7 @@ public class Servlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        /*try {
-            result = new JSONObject("{id:" + id + "}");
-        }catch(JSONException e){
-            e.printStackTrace();
-        }*/
-
         response.getWriter().print(result);
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

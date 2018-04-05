@@ -35,7 +35,7 @@ function getResult() {
     $('#resultDiv').empty();
     $.ajax({
         type: 'GET',
-        url: '/Servlet',
+        url: '/Records',
         data: {
             id: $('#id').val(),
             fname: $('#fname').val(),
@@ -83,6 +83,7 @@ function clearForm() {
     $('input[type=text]').val('');
     $('#resultDiv').slideUp(100);
     $('#selectDiv').slideUp(100);
+    $('#resposeText').empty();
 }
 
 function selectEmployee(id) {
@@ -93,6 +94,7 @@ function selectEmployee(id) {
 }
 
 function submitHours() {
+    $('#resposeText').empty();
     var sunV = validateInput($('#sun').val());
     var monV = validateInput($('#mon').val());
     var tueV = validateInput($('#tue').val());
@@ -104,7 +106,7 @@ function submitHours() {
     if (sunV && monV && tueV && wedV && thuV && friV && satV) {
         $.ajax({
             type: 'POST',
-            url: '/Servlet',
+            url: '/Records',
             data: {
                 id: $('#selectedId').text(),
                 week: $('#datepicker').val(),
@@ -118,7 +120,7 @@ function submitHours() {
             },
             dataType: 'json',
             success: function (result) {
-                $('#resposeText').text("Hours submission: " + result.state)
+                $('#resposeText').text("Hours submission: " + result.state +" - "+ result.msg).slide(200);
             },
             error: function (xhr) {
                 $("#resultDiv").text("There was an error submitting the hours");
@@ -142,5 +144,6 @@ function validateInput(input) {
 function close(item) {
     $(item).parents('div').hide(100);
     $('#resultDiv').slideDown(300);
+    $('#resposeText').empty(200);
 }
 
