@@ -219,7 +219,6 @@ function clearForm() {
     $('input[type=text]').val('');
     $('#resultDiv').slideUp(100);
     $('#selectDiv').slideUp(100);
-    $('#calcDiv').slideUp(100);
     $('#resposeText').empty();
 }
 
@@ -230,7 +229,7 @@ function clearHours() {
 function close(item) {
     $(item).parents('div').hide(100);
     $('#resultDiv').slideDown(300);
-    $('#resposeText').empty(200);
+    $('#resposeText, #wkSelect').empty(200);
     $('.innerDiv > .ctable').show();
 }
 

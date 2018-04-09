@@ -53,7 +53,7 @@
         <h3>Calculate Pay</h3>
         <button type="button" class="minmax" data-dismiss="alert" aria-hidden="true">-</button>
         <p class="rdSpan">
-            <input class="rd" type="radio" name="calc" value="table" id="sTable"><label for="sTable">From table</label>
+            <input class="rd" type="radio" name="calc" value="table" id="sTable" checked="checked"><label for="sTable">From table</label>
             <input class="rd" type="radio" name="calc" value="manual" id="sManual"><label for="sManual">Manual</label>
         </p>
         <table class="ctable" align="center" id="calcTable">
