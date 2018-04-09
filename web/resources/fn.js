@@ -27,20 +27,29 @@ $(document).ready(function () {
         minmax(this);
     });
 
+    $("input[name='calc']").change(function(){
+        checkRadio();
+    });
+
+    $("#wkSelect").on("change",function () {
+        getWeekHours();
+    });
+
     $("#dialog").dialog({
         autoOpen: false, modal: true, show: "blind", hide: "blind"
     });
-
 })
 
 function getResult() {
     $('#resultDiv').hide(100);
     $('#selectDiv').hide(100);
     $('#resultDiv').empty();
+    $('#resposeText').empty();
     $.ajax({
         type: 'GET',
         url: '/Records',
         data: {
+            type: 'records',
             id: $('#id').val(),
             fname: $('#fname').val(),
             lname: $('#lname').val()
@@ -66,7 +75,8 @@ function getResult() {
                         $('<td>').text(employee.last_name),
                         $('<td>').text(employee.rate),
                         $('<td>').text(employee.withholdings),
-                        $('<td>').html('<button onClick="selectEmployee(' + employee.emp_id + ')">SELECT</button>')
+                        $('<td>').html('<button onClick="selectEmployee(' + employee.emp_id + ',\'' + employee.first_name +
+                        '\',\'' + employee.last_name + '\',' + employee.rate + ',' + employee.withholdings + ')">SELECT</button>')
                     ).appendTo('#resTable tbody');
                 })
                 $('#resultDiv').slideDown(300);
@@ -83,30 +93,57 @@ function getResult() {
     })
 }
 
-function clearForm() {
-    $('input[type=text]').val('');
-    $('#resultDiv').slideUp(100);
-    $('#selectDiv').slideUp(100);
-    $('#calcDiv').slideUp(100);
-    $('#resposeText').empty();
-}
-
-function clearHours() {
-    $('.hour-entry').val('');
-}
-
-function selectEmployee(id) {
-    $('#selectedId').text(id);
-    $('#calculateId').text(id);
-    $('#selectDiv').find('input[type=text]').val('');
+function getHours(id) {
     $('#resultDiv').hide(100);
-    $('#selectDiv').slideDown(300);
-}
+    $('#selectDiv').hide(100);
+    $('#hrTable').remove();
+    $('#hourResMessage').text('');
+    $.ajax({
+        type: 'GET',
+        url: '/Records',
+        data: {
+            type: 'hours',
+            id: id
+        },
+        dataType: 'json',
+        success: function (result) {
+            if (result.length > 0) {
+                var table = $('<table class="ctable" align="center"><thead></thead><tbody></tbody></table>').attr('id', 'hrTable');
+                $('#availableDiv').append(table);
+                var header = $('<tr>');
+                var keys = [];
+                for (var k in result[0]) keys.push(k);
+                $.each(keys, function (index, key) {
+                    header.append($('<th>').text(key.replace("_", " ").toUpperCase()));
+                });
 
-function calculatePay(id, fname, lname, rate, wh) {
-    $('#calculatedId').text(id);
-    $('#resultDiv').hide(100);
-    $('#calcDiv').slideDown(300);
+                header.appendTo('#hrTable thead');
+
+                $.each(result, function (index, eHours) {
+                    var $tr = $('<tr id="'+eHours.week+'">').append(
+                        $('<td>').text(eHours.week),
+                        $('<td>').text(eHours.sun),
+                        $('<td>').text(eHours.mon),
+                        $('<td>').text(eHours.tue),
+                        $('<td>').text(eHours.wed),
+                        $('<td>').text(eHours.thu),
+                        $('<td>').text(eHours.fri),
+                        $('<td>').text(eHours.sat),
+                        $('<td>').text(eHours.total)
+                    ).appendTo('#hrTable tbody');
+
+                    var opt = $('<option></option>').attr("value",eHours.week).text(eHours.week).appendTo('#wkSelect');
+                })
+            }
+            else {
+                $('#hourResMessage').text("No hours available for processing");
+            }
+
+        },
+        error: function (xhr) {
+            $("#resultDiv").text("There was an error retrieving the results");
+        }
+    })
 }
 
 function submitHours() {
@@ -150,11 +187,44 @@ function submitHours() {
 
 }
 
+function selectEmployee(id, fname, lname, rate, wh) {
+    $('#selectedId').text(id);
+    $('#selectedName').text(fname + " " + lname);
+    $('#hRate').text(rate);
+    $('#hWh').text(wh);
+    $('#selectDiv').find('input[type=text]').val('');
+    getHours(id);
+    $('#resultDiv').hide(100);
+    $('#selectDiv').slideDown(300);
+}
+
+function calculatePay(id, fname, lname, rate, wh) {
+    var value = $('input[name=calc]:checked').val();
+    if(value === 'table'){
+        alert($('#manHours').text());
+    }else if(value === 'manual'){
+        alert($('#manHoursB').val());
+    }
+}
+
+
 function validateInput(input) {
     if ($.isNumeric(input) && input >= 0 && input <= 24)
         return true;
     else
         return false;
+}
+
+function clearForm() {
+    $('input[type=text]').val('');
+    $('#resultDiv').slideUp(100);
+    $('#selectDiv').slideUp(100);
+    $('#calcDiv').slideUp(100);
+    $('#resposeText').empty();
+}
+
+function clearHours() {
+    $('.hour-entry').val('');
 }
 
 function close(item) {
@@ -165,5 +235,24 @@ function close(item) {
 }
 
 function minmax(item) {
-    $(item).parent().children('table').toggle("slide", { direction: "up" }, 100);
+    $(item).parent().children('table, p').toggle("slide", { direction: "up" }, 100);
+    var icon = $(item).text();
+    $(item).text(icon == "-" ? "+" : "-");
+}
+
+function checkRadio(){
+    var value = $('input[name=calc]:checked').val();
+    if(value === 'table'){
+        $('#manHours').html('');
+        $('#calcTable td:first-child, #calcTable th:first-child').show(100);
+    }else if(value === 'manual'){
+        $('#manHours').html('<input class="hour-entry" type="text" id="manHoursB"/>');
+        $('#calcTable td:first-child, #calcTable th:first-child').hide(100);
+    }
+}
+
+function getWeekHours(){
+    var selected = $('#wkSelect').find(":selected").text();
+    var hours = $('#'+ selected+ ' td:last-child').text();
+    $('#manHours').text(hours);
 }

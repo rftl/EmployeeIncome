@@ -149,6 +149,52 @@ public class Records extends HttpServlet {
         return response;
     }
 
+    private static JSONArray getHours(String id) {
+        String test = "";
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        JSONArray jsonArray = new JSONArray();
+
+        String sql = "select week, sun, mon, tue, wed, thu, " +
+                "fri, sat, (sun + mon + tue + wed + thu + fri + sat) as total from Employee_Hours " +
+                "where processed <> 'Y' and emp_id = '" + id + "'" +
+                "order by week;";
+
+        System.out.println(sql);
+
+        try {
+            con = getDS().getConnection();
+            stmt = con.prepareStatement(sql);
+            rs = stmt.executeQuery();
+            ResultSetMetaData rm = rs.getMetaData();
+            int cnum = rm.getColumnCount();
+
+            while (rs.next()) {
+                LinkedHashMap<String, String> jsonOrderedMap = new LinkedHashMap<String, String>();
+                for (int i = 1; i <= cnum; i++) {
+                    jsonOrderedMap.put(rm.getColumnLabel(i).toLowerCase(), rs.getString(i));
+                }
+                JSONObject orderedJson = new JSONObject(jsonOrderedMap);
+                jsonArray.put(orderedJson);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonArray;
+    }
+
     private String fixBlanks(String input) {
         String output = (input == "") ? "0" : input;
         return output;
@@ -181,13 +227,22 @@ public class Records extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        String id = request.getParameter("id");
-        String fname = request.getParameter("fname");
-        String lname = request.getParameter("lname");
+        if (request.getParameter("type").equals("records")) {
 
-        JSONArray result = getRecords(id, fname, lname);
+            String id = request.getParameter("id");
+            String fname = request.getParameter("fname");
+            String lname = request.getParameter("lname");
 
-        response.getWriter().print(result);
+            JSONArray result = getRecords(id, fname, lname);
+
+            response.getWriter().print(result);
+        } else if (request.getParameter("type").equals("hours")) {
+            String id = request.getParameter("id");
+
+            JSONArray result = getHours(id);
+
+            response.getWriter().print(result);
+        }
     }
 
 }

@@ -1,3 +1,7 @@
+body{
+    font-family: 'Varela', sans-serif;
+}
+
 h3 {
     float: left;
 }
@@ -22,7 +26,7 @@ h3 {
     color: #000;
     filter: alpha(opacity=20);
     float: right;
-    font-size: 21px;
+    font-size: 14px;
     font-weight: bold;
     line-height: 1;
     opacity: .6;
@@ -54,7 +58,6 @@ h3 {
     background-repeat: no-repeat;
     box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.2);
     transition: box-shadow 150ms ease-in-out, border 150ms ease-in-out, background-color 150ms ease-in-out;
-    font-family: 'Varela', sans-serif;
     color: white;
     font-style: normal;
 }
@@ -68,7 +71,6 @@ h3 {
     background-repeat: no-repeat;
     box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.2);
     transition: box-shadow 150ms ease-in-out, border 150ms ease-in-out, background-color 150ms ease-in-out;
-    font-family: 'Varela', sans-serif;
     color: white;
     font-style: normal;
     text-align: center;
@@ -83,7 +85,6 @@ h3 {
     background-repeat: no-repeat;
     box-shadow: inset 0 0 15px -2px rgba(0, 0, 0, 0.2);
     transition: box-shadow 150ms ease-in-out, border 150ms ease-in-out, background-color 150ms ease-in-out;
-    font-family: 'Varela', sans-serif;
     color: white;
     font-style: normal;
     text-align: center;
@@ -125,7 +126,6 @@ h3 {
     transition: box-shadow 150ms ease-in-out,
     border 150ms ease-in-out,
     background-color 150ms ease-in-out;
-    font-family: 'Varela', sans-serif;
     color: white;
     font-size: 16px;
     font-style: normal;
@@ -170,7 +170,13 @@ h3 {
 
 .hour-entry {
     width: 100%;
+    text-align: center;
 }
+
+.resMsg, .rdSpan{
+    clear: both;
+}
+
 
 @media (max-width: 979px) and (min-width: 768px) {
     .main .popup {

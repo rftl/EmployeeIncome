@@ -33,40 +33,54 @@
 <div class="main popup" id="selectDiv">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 
-    <div class="innerDiv" id="availableDiv">
-        <h3>Available Hours</h3>
-        <button type="button" class="minmax" data-dismiss="alert" aria-hidden="true">-</button>
-        <table class="ctable" align="center" id="availTable">
-            <thead>
-            <tr>
-                <th>ID</th>
-            </tr>
-            </thead>
+    <div class="innerDiv" id="infoDiv">
+        <table class="ctable" id="infoTable">
             <tbody>
             <tr>
-                <td id="availId"></td>
+                <td id="selectedName"></td>
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="innerDiv" id="availableDiv">
+        <h3>Available Hours</h3>
+        <button type="button" class="minmax" data-dismiss="alert" aria-hidden="true">-</button>
+        <p class="resMsg" id="hourResMessage"></p>
     </div>
 
     <div class="innerDiv" id="calcDiv">
         <h3>Calculate Pay</h3>
         <button type="button" class="minmax" data-dismiss="alert" aria-hidden="true">-</button>
+        <p class="rdSpan">
+            <input class="rd" type="radio" name="calc" value="table" id="sTable"><label for="sTable">From table</label>
+            <input class="rd" type="radio" name="calc" value="manual" id="sManual"><label for="sManual">Manual</label>
+        </p>
         <table class="ctable" align="center" id="calcTable">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>Week</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Withholdings</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td id="calculateId"></td>
+                <td id="hWeek">
+                    <select id="wkSelect"></select>
+                </td>
+                <td id="manHours"></td>
+                <td id="hRate"></td>
+                <td id="hWh"></td>
+                <td>
+                    <button onclick="calculatePay()">&#10004;</button>
+                    <button onclick="clearPay()">&#10008;</button>
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
-
     <div class="innerDiv" id="hoursDiv">
         <h3>Submit Hours</h3>
         <button type="button" class="minmax" data-dismiss="alert" aria-hidden="true">-</button>
@@ -96,8 +110,8 @@
                 <td><input class="hour-entry" type="text" id="fri"/></td>
                 <td><input class="hour-entry" type="text" id="sat"/></td>
                 <td>
-                    <button onclick="submitHours()">SUBMIT</button>
-                    <button onclick="clearHours()">CLEAR</button>
+                    <button onclick="submitHours()">&#10004;</button>
+                    <button onclick="clearHours()">&#10008;</button>
                 </td>
             </tr>
             </tbody>
