@@ -23,8 +23,12 @@ $(document).ready(function () {
         close(this);
     });
 
+    $('.minmax').on("click", function () {
+        minmax(this);
+    });
+
     $("#dialog").dialog({
-        autoOpen : false, modal : true, show : "blind", hide : "blind"
+        autoOpen: false, modal: true, show: "blind", hide: "blind"
     });
 
 })
@@ -55,14 +59,14 @@ function getResult() {
 
                 header.appendTo('#resTable thead');
 
-                $.each(result, function (index, element) {
+                $.each(result, function (index, employee) {
                     var $tr = $('<tr>').append(
-                        $('<td>').text(element.emp_id),
-                        $('<td>').text(element.first_name),
-                        $('<td>').text(element.last_name),
-                        $('<td>').text(element.rate),
-                        $('<td>').text(element.withholdings),
-                        $('<td>').html('<button onClick="selectEmployee(' + element.emp_id + ')">SELECT</button>')
+                        $('<td>').text(employee.emp_id),
+                        $('<td>').text(employee.first_name),
+                        $('<td>').text(employee.last_name),
+                        $('<td>').text(employee.rate),
+                        $('<td>').text(employee.withholdings),
+                        $('<td>').html('<button onClick="selectEmployee(' + employee.emp_id + ')">SELECT</button>')
                     ).appendTo('#resTable tbody');
                 })
                 $('#resultDiv').slideDown(300);
@@ -83,14 +87,26 @@ function clearForm() {
     $('input[type=text]').val('');
     $('#resultDiv').slideUp(100);
     $('#selectDiv').slideUp(100);
+    $('#calcDiv').slideUp(100);
     $('#resposeText').empty();
+}
+
+function clearHours() {
+    $('.hour-entry').val('');
 }
 
 function selectEmployee(id) {
     $('#selectedId').text(id);
+    $('#calculateId').text(id);
     $('#selectDiv').find('input[type=text]').val('');
     $('#resultDiv').hide(100);
     $('#selectDiv').slideDown(300);
+}
+
+function calculatePay(id, fname, lname, rate, wh) {
+    $('#calculatedId').text(id);
+    $('#resultDiv').hide(100);
+    $('#calcDiv').slideDown(300);
 }
 
 function submitHours() {
@@ -120,13 +136,13 @@ function submitHours() {
             },
             dataType: 'json',
             success: function (result) {
-                $('#resposeText').text("Hours submission: " + result.state +" - "+ result.msg).slide(200);
+                $('#resposeText').text("Hours submission: " + result.state + " - " + result.msg).slide(200);
             },
             error: function (xhr) {
                 $("#resultDiv").text("There was an error submitting the hours");
             }
         })
-    }else{
+    } else {
         $('#dialog > p').text("Hour input is invalid. Please review");
         $('#dialog').dialog("open");
         return false
@@ -135,7 +151,7 @@ function submitHours() {
 }
 
 function validateInput(input) {
-    if($.isNumeric(input) && input >= 0 && input <= 24 )
+    if ($.isNumeric(input) && input >= 0 && input <= 24)
         return true;
     else
         return false;
@@ -145,5 +161,9 @@ function close(item) {
     $(item).parents('div').hide(100);
     $('#resultDiv').slideDown(300);
     $('#resposeText').empty(200);
+    $('.innerDiv > .ctable').show();
 }
 
+function minmax(item) {
+    $(item).parent().children('table').toggle("slide", { direction: "up" }, 100);
+}

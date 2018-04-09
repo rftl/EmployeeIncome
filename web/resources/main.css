@@ -1,3 +1,7 @@
+h3 {
+    float: left;
+}
+
 #resultDiv, #selectDiv {
     display: none;
 }
@@ -11,12 +15,34 @@
     line-height: 1;
     opacity: .6;
     text-shadow: 0 1px 0 #fff;
+    cursor: pointer;
+}
+
+.minmax {
+    color: #000;
+    filter: alpha(opacity=20);
+    float: right;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1;
+    opacity: .6;
+    text-shadow: 0 1px 0 #fff;
+    cursor: pointer;
+    float: right;
+    top: 20px;
+    position: relative;
+    line-height: 12px;
 }
 
 .ctable{
     font-size: 16px;
     table-layout:fixed;
     width: 100%;
+}
+
+.innerDiv{
+    margin-top: 30px;
+    min-height: 60px;
 }
 
 .ctable th {
@@ -64,7 +90,7 @@
 }
 
 .main {
-    max-width: 1125px;
+    max-width: 1200px;
     min-width: 565px;
     padding: 20px;
     border-radius: 5px;
