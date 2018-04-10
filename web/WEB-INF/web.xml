@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>Records</servlet-name>
-        <servlet-class>Records</servlet-class>
+        <servlet-class>Controllers.Records</servlet-class>
     </servlet>
 
     <servlet-mapping>
